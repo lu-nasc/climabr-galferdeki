@@ -11,6 +11,8 @@ import { SearchCityService } from 'src/domain/services/search-city.service';
 import { LoadWeatherService } from 'src/domain/services/load-weather.service';
 import { LocalCityRepository } from 'src/data/local-city-repository';
 import { ApiWeatherRepository } from 'src/data/api-weather-repository';
+import { GeolocationService } from 'src/domain/services/geolocation.service';
+import { Geolocation } from '@ionic-native/geolocation';
 
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
