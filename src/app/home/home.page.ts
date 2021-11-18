@@ -31,4 +31,8 @@ export class HomePage {
   onSelectCity(cityId: string) {
     this.router.navigateByUrl(`/weather/${cityId}`);
   }
+
+  onSelectCurrentLocation() {
+    
+  }
 }
