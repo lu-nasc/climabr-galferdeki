@@ -4,14 +4,15 @@ import { UnavailableServiceError } from '../errors/unavailable-service.error';
 import { GeolocationRepository } from './protocols/geolocation-repository';
 
 export class GeolocationService extends GeolocationRepository {
-    constructor(private readonly geolocation: Geolocation) { super() }
+    constructor() { super() }
 
     async getInstantPosition(): Promise<Coordinate> {
-        let coordinate: Coordinate;
-        this.geolocation.getCurrentPosition((position) => {
-            coordinate.latitude = position.coords.latitude;
-            coordinate.longitude = position.coords.longitude;
-        }, () => { throw UnavailableServiceError; })
-        return coordinate;
+        try {
+            const position = await Geolocation.getCurrentPosition();
+            return { 
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+        } catch { throw UnavailableServiceError; }
     }
 }
