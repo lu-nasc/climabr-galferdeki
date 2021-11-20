@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { City } from 'src/domain/entities/city';
+import { Coordinate } from 'src/domain/entities/coordinate';
+import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';
 import { SearchCityService } from 'src/domain/services/search-city.service';
 
 @Component({
@@ -15,6 +17,7 @@ export class HomePage {
 
   constructor(
     private readonly searchService: SearchCityService,
+    private readonly geolocationService: GetGeolocationService,
     private readonly router: Router
   ) {}
 
@@ -32,7 +35,12 @@ export class HomePage {
     this.router.navigateByUrl(`/weather/${cityId}`);
   }
 
-  onSelectCurrentLocation() {
-    
+  onSelectCurrentLocation(coordinate: Coordinate) {
+    this.router.navigate(['/weather'], {
+      queryParams: {
+        latitude:coordinate.latitude, 
+        longitude: coordinate.longitude }
+      });
   }
+
 }

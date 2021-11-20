@@ -11,17 +11,24 @@ import { SearchCityService } from 'src/domain/services/search-city.service';
 import { LoadWeatherService } from 'src/domain/services/load-weather.service';
 import { LocalCityRepository } from 'src/data/local-city-repository';
 import { ApiWeatherRepository } from 'src/data/api-weather-repository';
-import { GeolocationService } from 'src/domain/services/geolocation.service';
+import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';
+import { IonicGeolocationRepository } from 'src/data/ionic-geolocation-repository';
+import { Geolocation } from '@ionic-native/geolocation';
 
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
 };
 
+const createGeolocationService = (geolocation: Geolocation) => {
+  return new GetGeolocationService(
+    new IonicGeolocationRepository(geolocation)
+  );
+}
+
 const createLoadWeatherService = (http: HttpClient) => {
   return new LoadWeatherService(
     new LocalCityRepository(),
-    new ApiWeatherRepository(http),
-    new GeolocationService()
+    new ApiWeatherRepository(http)
   );
 };
 
@@ -44,6 +51,11 @@ const createLoadWeatherService = (http: HttpClient) => {
       provide: LoadWeatherService,
       useFactory: createLoadWeatherService,
       deps: [HttpClient],
+    },
+    {
+      provide: GetGeolocationService,
+      useFactory: createGeolocationService,
+      deps: [Geolocation]
     },
     ],
   bootstrap: [AppComponent],

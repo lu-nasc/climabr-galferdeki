@@ -11,8 +11,7 @@ import { WeatherRepository } from './protocols/weather-repository';
 export class LoadWeatherService {
   constructor(
     private readonly cityRepo: CityRepository,
-    private readonly weatherRepo: WeatherRepository,
-    private readonly geolocationRepo: GeolocationRepository
+    private readonly weatherRepo: WeatherRepository
   ) {}
 
   async loadByCity(cityId: number): Promise<Weather> {
@@ -28,15 +27,13 @@ export class LoadWeatherService {
     return weather;
   }
 
-  async loadByGeolocation(): Promise<Weather> {
+  async loadByCoordinate(coordinate: Coordinate): Promise<Weather> {
     try {
-      const coordinate = await this.geolocationRepo.getInstantPosition();
       const nearestCityInRepo = (await this.cityRepo.getAll())
           .map((city) => { 
             return { 
               distance: this.distance(city.coord, coordinate), 
-              city: city
-            };
+              city: city };
           })
           .reduce((previous, current) => {
             return previous.distance < current.distance ? previous : current;
@@ -46,7 +43,6 @@ export class LoadWeatherService {
           
           return weather;
     } catch { throw UnavailableServiceError; }
-    return null;
   }
 
   private distance(one: Coordinate, other: Coordinate): number {
