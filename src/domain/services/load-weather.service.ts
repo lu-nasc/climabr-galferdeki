@@ -30,27 +30,27 @@ export class LoadWeatherService {
 
   async loadByGeolocation(): Promise<Weather> {
     try {
-      // Encontrar cidade.
-      // * Carregar todas as cidades.
       const coordinate = await this.geolocationRepo.getInstantPosition();
-      const distances = (await this.cityRepo.getAll()).map((city) => { return this.calculateDistance(city.coord, coordinate);});
-      
-      // * Obter a cidade mais proxima com base nas coordenadas da geolocalizacao.
-      // Encontrar meteorologia.
-      // * Passar as coordenadas para o metodo load de weatherRepo.
+      const nearestCityInRepo = (await this.cityRepo.getAll())
+          .map((city) => { 
+            return { 
+              distance: this.distance(city.coord, coordinate), 
+              city: city
+            };
+          })
+          .reduce((previous, current) => {
+            return previous.distance < current.distance ? previous : current;
+          });
+          const weather = await this.weatherRepo.load(nearestCityInRepo.city.coord);
+          weather.city = nearestCityInRepo.city;
+          
+          return weather;
     } catch { throw UnavailableServiceError; }
     return null;
   }
 
-  calculateDistance(one: Coordinate, other: Coordinate): number {
+  private distance(one: Coordinate, other: Coordinate): number {
     return Math.sqrt(Math.pow((one.latitude - other.latitude), 2.0) +
                      Math.pow((one.longitude - other.longitude), 2.0));
   }
-
-  minDistance(oneDistance: number, otherDistance: number): number {
-    if ( oneDistance < otherDistance) 
-      return oneDistance;
-    return otherDistance; 
-  }
-
 }
