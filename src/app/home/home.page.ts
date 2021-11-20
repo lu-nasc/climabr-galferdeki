@@ -35,7 +35,8 @@ export class HomePage {
     this.router.navigateByUrl(`/weather/${cityId}`);
   }
 
-  onSelectCurrentLocation(coordinate: Coordinate) {
+  async onSelectCurrentLocation() {
+    const coordinate = await this.geolocationService.getInstantPosition();
     this.router.navigate(['/weather'], {
       queryParams: {
         latitude:coordinate.latitude, 
