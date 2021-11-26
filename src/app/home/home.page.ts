@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { City } from 'src/domain/entities/city';
-import { Coordinate } from 'src/domain/entities/coordinate';
 import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';
 import { SearchCityService } from 'src/domain/services/search-city.service';
 

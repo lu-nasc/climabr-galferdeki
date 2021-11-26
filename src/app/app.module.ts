@@ -4,6 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,7 +14,6 @@ import { LocalCityRepository } from 'src/data/local-city-repository';
 import { ApiWeatherRepository } from 'src/data/api-weather-repository';
 import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';
 import { IonicGeolocationRepository } from 'src/data/ionic-geolocation-repository';
-import { Geolocation } from '@ionic-native/geolocation';
 
 const createSearchCityService = () => {
   return new SearchCityService(new LocalCityRepository());
@@ -56,7 +56,7 @@ const createLoadWeatherService = (http: HttpClient) => {
       provide: GetGeolocationService,
       useFactory: createGeolocationService,
       deps: [Geolocation]
-    },
+    }
     ],
   bootstrap: [AppComponent],
 })

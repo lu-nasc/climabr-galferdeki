@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
-import { City } from 'src/domain/entities/city';
 import { Weather } from 'src/domain/entities/weather';
 import { UnavailableServiceError } from 'src/domain/errors/unavailable-service.error';
 import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';

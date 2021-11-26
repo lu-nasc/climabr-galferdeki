@@ -1,4 +1,4 @@
-import { Geolocation } from "@ionic-native/geolocation";
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { Coordinate } from "src/domain/entities/coordinate";
 import { UnavailableServiceError } from "src/domain/errors/unavailable-service.error";
 import { GeolocationRepository } from "src/domain/services/protocols/geolocation-repository";
