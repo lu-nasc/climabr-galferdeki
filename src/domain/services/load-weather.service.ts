@@ -28,9 +28,10 @@ export class LoadWeatherService {
   async loadByCoordinate(coordinate: Coordinate): Promise<Weather> {
     try {
       const nearestCityInRepo = (await this.cityRepo.getAll())
-          .map((city) => { 
+          .map((city) => {
+            console.log(this.distance(coordinate, city.coord)); 
             return { 
-              distance: this.distance(city.coord, coordinate), 
+              distance: this.distance(coordinate, city.coord), 
               city: city };
           })
           .reduce((previous, current) => {
@@ -43,8 +44,19 @@ export class LoadWeatherService {
     } catch { throw UnavailableServiceError; }
   }
 
+  private toRadiansa(num: number): number {
+    return num * Math.PI / 180;
+  }
+
   private distance(one: Coordinate, other: Coordinate): number {
-    return Math.sqrt(Math.pow((one.latitude - other.latitude), 2.0) +
-                     Math.pow((one.longitude - other.longitude), 2.0));
+    const earthRadius = 6371; // In kilometers
+    const deltaLatitude = this.toRadiansa(other.latitude - one.latitude);
+    const deltaLongitude = this.toRadiansa(other.longitude - one.longitude);
+    const halfCalculation = Math.sin(deltaLatitude / 2) ** 2 + 
+                            Math.sin(deltaLongitude / 2) ** 2 *
+                            Math.cos(this.toRadiansa(one.latitude)) *
+                            Math.cos(this.toRadiansa(other.latitude));
+    return earthRadius * 2 * 
+        Math.asin(Math.sqrt(halfCalculation));
   }
 }

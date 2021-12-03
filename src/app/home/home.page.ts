@@ -9,6 +9,7 @@ import { SearchCityService } from 'src/domain/services/search-city.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
 export class HomePage {
   cities: City[];
   hasError: boolean = false;

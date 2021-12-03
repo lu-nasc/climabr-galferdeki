@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
+import { Coordinate } from 'src/domain/entities/coordinate';
 import { Weather } from 'src/domain/entities/weather';
 import { UnavailableServiceError } from 'src/domain/errors/unavailable-service.error';
 import { GetGeolocationService } from 'src/domain/services/get-geolocation.service';
@@ -33,7 +34,16 @@ export class WeatherPage {
     this.cityId = Number.parseInt(
       this.activatedRoute.snapshot.paramMap.get('id')
     );
-    this.loadWeather();
+    if(!this.cityId) {
+      this.activatedRoute.queryParams.subscribe(
+        data => {
+          this.loadWeatherByCoordinate({
+            latitude: data.latitude,
+            longitude: data.longitude
+          })
+        }
+      );
+    } else { this.loadWeather(); }
   }
 
   get currentDate() {
@@ -67,6 +77,21 @@ export class WeatherPage {
       this.hasError = false;
       this.canRetry = false;
       this.weather = await this.weatherService.loadByCity(this.cityId);
+    } catch (error) {
+      this.hasError = true;
+      this.errorMessage = error.message;
+      this.canRetry = error instanceof UnavailableServiceError;
+    } finally {
+      await this.loadingCtrl.dismiss();
+    }
+  }
+
+  async loadWeatherByCoordinate(coord: Coordinate) {
+    try {
+      await this.presentLoading();
+      this.hasError = false;
+      this.canRetry = false;
+      this.weather = await this.weatherService.loadByCoordinate(coord);
     } catch (error) {
       this.hasError = true;
       this.errorMessage = error.message;

@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'weather/:id',
     loadChildren: () => import('./weather/weather.module').then( m => m.WeatherPageModule)
   },
+  {
+    path: 'weather',
+    loadChildren: () => import('./weather/weather.module').then( m => m.WeatherPageModule)
+  },
 ];
 
 @NgModule({

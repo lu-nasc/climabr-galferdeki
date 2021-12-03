@@ -30,6 +30,7 @@ npm-debug.log*
 /plugins
 /www
 
+package-lock.json
 api-config.ts
 
 .firebase
