@@ -9,8 +9,8 @@ export class BrowserGeolocationRepository extends GeolocationRepository{
             navigator.geolocation.getCurrentPosition(
                 position => {
                     resolve({ 
-                        latitude: position.coords.longitude, 
-                        longitude: position.coords.latitude });
+                        latitude: position.coords.latitude, 
+                        longitude: position.coords.longitude });
                 },
                 error => { reject(UnavailableServiceError); });
         });

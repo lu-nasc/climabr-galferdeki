@@ -39,7 +39,7 @@ export class HomePage {
     const coordinate = await this.geolocationService.getInstantPosition();
     this.router.navigate(['/weather'], {
       queryParams: {
-        latitude:coordinate.latitude, 
+        latitude: coordinate.latitude, 
         longitude: coordinate.longitude }
       });
   }
